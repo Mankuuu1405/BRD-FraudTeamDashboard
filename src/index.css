@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@layer base {
+  :focus {
+    outline: none !important;
+  }
+}
