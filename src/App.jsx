@@ -10,6 +10,7 @@ import Reports from "./pages/Reports";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import CaseDetails from "./pages/CaseDetails";
 import { HiMenu } from "react-icons/hi";
 
 export default function App() {
@@ -80,6 +81,15 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <Settings />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/cases/:caseId"
+                element={
+                  <ProtectedRoute>
+                    <CaseDetails />
                   </ProtectedRoute>
                 }
               />

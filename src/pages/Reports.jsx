@@ -1,35 +1,43 @@
-// src/pages/Reports.jsx
-import { MonthlyFraudChart } from "../components/Charts/MonthlyFraudChart";
-import { FraudTypeChart } from "../components/Charts/FraudTypeChart";
-import QuarterlyFraudChart from "../components/Charts/QuaterlyFraudChart";
-import TopFraudCases from "../components/Charts/TopFraudCases";
+import { useState } from "react";
+import ReportSelector from "../components/reports/ReportSelector";
+import ReportGenerator from "../components/reports/ReportGenerator";
+import ReportTable from "../components/reports/ReportTable";
 
 export default function Reports() {
+  const [selectedReport, setSelectedReport] = useState("Fraud Summary Report");
+  const [reportData, setReportData] = useState([]);
 
+  const mockData = [
+    {
+      id: "CASE-001",
+      name: "Ravi Sharma",
+      fraud: 78,
+      aml: "CLEAR",
+      synthetic: "SUSPECT",
+    },
+    {
+      id: "CASE-002",
+      name: "Aditya Singh",
+      fraud: 45,
+      aml: "HIT",
+      synthetic: "CLEAN",
+    },
+  ];
+
+  const generateReport = (from, to) => {
+    // Filtering logic can be added later
+    setReportData(mockData);
+  };
 
   return (
-    <div className="p-6 space-y-8">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">Fraud Reports & Analytics</h1>
-      </div>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Reports</h1>
 
-      {/* Grid for charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Chart 1 */}
-        <MonthlyFraudChart />
+      <ReportSelector selected={selectedReport} setSelected={setSelectedReport} />
 
-        {/* Chart 2 */}
-        {/* Fraud Type Breakdown */}
-        <FraudTypeChart />
+      <ReportGenerator onGenerate={generateReport} />
 
-      </div>
-
-      {/* Chart 3 */}
-      <QuarterlyFraudChart />
-
-      {/* Optional Table */}
-      <TopFraudCases />
+      <ReportTable data={reportData} />
     </div>
   );
 }
