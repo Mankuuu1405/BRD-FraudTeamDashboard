@@ -23,7 +23,7 @@ export default function Login() {
         onSubmit={handleLogin}
         className="bg-white p-8 rounded-xl shadow-md w-96"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
+        <h1 className="text-2xl font-bold mb-6">Login</h1>
 
         <input
           type="email"

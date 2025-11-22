@@ -17,7 +17,7 @@ export default function ReportSelector({ selected, setSelected }) {
             onClick={() => setSelected(t)}
             className={`p-3 rounded-lg border text-sm ${
               selected === t
-                ? "bg-blue-600 text-white border-blue-600"
+                ? "bg-primary-blue text-white border-primary-blue"
                 : "bg-gray-50 border-gray-300"
             }`}
           >

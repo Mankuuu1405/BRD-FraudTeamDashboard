@@ -1,4 +1,4 @@
-export default function ReportTable({ data }) {
+export default function ReportTable({ data, onExportCSV, onExportPDF }) {
   if (!data.length)
     return <p className="text-gray-500 text-sm">No report generated yet.</p>;
 
@@ -21,7 +21,7 @@ export default function ReportTable({ data }) {
             <tr key={row.id} className="border-b">
               <td className="py-2">{row.id}</td>
               <td>{row.name}</td>
-              <td>{row.fraud}</td>
+              <td>{row.fraud}%</td>
               <td>{row.aml}</td>
               <td>{row.synthetic}</td>
 
@@ -47,12 +47,19 @@ export default function ReportTable({ data }) {
         </tbody>
       </table>
 
+      {/* Export Buttons */}
       <div className="flex gap-3 mt-4">
-        <button className="px-4 py-2 bg-gray-700 text-white rounded-lg">
+        <button
+          onClick={onExportCSV}
+          className="px-4 py-2 bg-gray-700 text-white rounded-lg"
+        >
           Export CSV
         </button>
 
-        <button className="px-4 py-2 bg-red-600 text-white rounded-lg">
+        <button
+          onClick={onExportPDF}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg"
+        >
           Export PDF
         </button>
       </div>

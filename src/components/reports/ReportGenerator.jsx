@@ -3,6 +3,17 @@ import { useState } from "react";
 export default function ReportGenerator({ onGenerate }) {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = () => {
+    if (!from || !to) return alert("Please select both dates");
+
+    setLoading(true);
+
+    onGenerate(from, to, () => {
+      setLoading(false);
+    });
+  };
 
   return (
     <div className="bg-white p-4 rounded-xl shadow mb-6">
@@ -24,10 +35,10 @@ export default function ReportGenerator({ onGenerate }) {
         />
 
         <button
-          onClick={() => onGenerate(from, to)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+          onClick={handleGenerate}
+          className="px-4 py-2 bg-primary-blue text-white rounded-lg"
         >
-          Generate
+          {loading ? "Generating..." : "Generate"}
         </button>
       </div>
     </div>
