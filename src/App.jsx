@@ -17,13 +17,14 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 
 import { HiMenu } from "react-icons/hi";
+import SignUp from "./pages/SignUp";
 
 export default function App() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Routes where sidebar is hidden
-  const hideSidebarRoutes = ["/login", "/forgot-password"];
+  const hideSidebarRoutes = ["/login", "/forgot-password", "/signup"];
   const hideSidebar = hideSidebarRoutes.includes(location.pathname);
 
   // Page title logic
@@ -118,6 +119,7 @@ export default function App() {
             {/* Non-protected routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </div>
       </div>
