@@ -1,39 +1,59 @@
 import { HiX } from "react-icons/hi";
+import { useState } from "react";
 
 export default function ProfileModal({ open, onClose, user, onSave }) {
+  const [formData, setFormData] = useState({
+    name: user?.name || "",
+    email: user?.email || ""
+  });
+
   if (!open) return null;
 
+  const handleSave = () => {
+    onSave(formData);
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 space-y-6">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8 space-y-6">
         
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Edit Profile</h2>
-          <button onClick={onClose} className="p-1">
-            <HiX className="text-xl" />
+          <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
+          <button 
+            onClick={onClose} 
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <HiX className="text-2xl text-gray-500" />
           </button>
         </div>
 
         {/* Form */}
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="text-sm font-medium">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Full Name
+            </label>
             <input
               type="text"
-              className="mt-1 p-2 border rounded-lg w-full"
-              value={user.name}
-              onChange={(e) => onSave({ ...user, name: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Enter your full name"
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email
+            </label>
             <input
               type="email"
-              className="mt-1 p-2 border rounded-lg w-full"
-              value={user.email}
-              onChange={(e) => onSave({ ...user, email: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="Enter your email"
             />
           </div>
         </div>
@@ -42,17 +62,15 @@ export default function ProfileModal({ open, onClose, user, onSave }) {
         <div className="flex justify-end gap-3 pt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-gray-200 text-sm"
+            className="px-6 py-3 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-colors"
           >
             Cancel
           </button>
           <button
-            onClick={() => {
-              onClose();
-            }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+            onClick={handleSave}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </div>

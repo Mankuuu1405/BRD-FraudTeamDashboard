@@ -14,47 +14,50 @@ export default function EditProfileModal({ open, onClose }) {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h2>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div>
-          <label className="text-sm font-medium">Name</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
           <input
-            className="w-full border rounded-lg p-2 mt-1"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium">Email</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
           <input
-            className="w-full border rounded-lg p-2 mt-1"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium">Phone</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
           <input
-            className="w-full border rounded-lg p-2 mt-1"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            placeholder="Enter your phone number"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-3">
+        <div className="flex justify-end gap-3 pt-4">
           <button
-            className="px-4 py-2 rounded-lg border"
+            className="px-6 py-3 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition-colors"
             onClick={onClose}
           >
             Cancel
           </button>
 
           <button
-            className="px-4 py-2 bg-primary-blue text-white rounded-lg"
+            className="px-6 py-3 bg-primary-blue text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-md hover:shadow-lg"
             onClick={handleSave}
           >
             Save Changes

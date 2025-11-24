@@ -13,10 +13,10 @@ export default function SecuritySettings() {
       {/* Update Email */}
       <div className="space-y-3">
         <p className="font-medium text-sm">Change Email</p>
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row w-1/2 gap-3">
           <input
             type="email"
-            className="border rounded-lg p-2 flex-1"
+            className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition p-2 flex-1"
             placeholder="Enter new email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -37,14 +37,14 @@ export default function SecuritySettings() {
         <div className="grid sm:grid-cols-3 gap-3">
           <input
             type="password"
-            className="border rounded-lg p-2"
+            className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition p-2"
             placeholder="New password"
             value={pw1}
             onChange={(e) => setPw1(e.target.value)}
           />
           <input
             type="password"
-            className="border rounded-lg p-2"
+            className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition p-2"
             placeholder="Confirm password"
             value={pw2}
             onChange={(e) => setPw2(e.target.value)}

@@ -9,7 +9,7 @@ import {
 export default function ProfileDropdown({ user, onLogout, onEditProfile }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
-  const navigate = useNavigate();  // <-- ADDED
+  const navigate = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -34,14 +34,14 @@ export default function ProfileDropdown({ user, onLogout, onEditProfile }) {
       {/* Avatar Button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-9 h-9 flex items-center justify-center bg-gray-300 rounded-full text-sm font-semibold hover:bg-gray-400"
+        className="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-full text-sm font-semibold hover:bg-blue-700 transition-colors shadow-md"
       >
         {initials}
       </button>
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg py-2 border z-40">
+        <div className="absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-xl py-1 z-50">
           
           {/* Profile */}
           <button
@@ -49,31 +49,34 @@ export default function ProfileDropdown({ user, onLogout, onEditProfile }) {
               setOpen(false);
               onEditProfile();
             }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <HiOutlineUserCircle className="text-lg" />
-            Profile
+            <HiOutlineUserCircle className="text-xl text-gray-600" />
+            <span className="font-medium">Profile</span>
           </button>
 
           {/* Settings */}
           <button
             onClick={() => {
               setOpen(false);
-              navigate("/settings");   // <-- FIXED
+              navigate("/settings");
             }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <HiOutlineCog className="text-lg" />
-            Settings
+            <HiOutlineCog className="text-xl text-gray-600" />
+            <span className="font-medium">Settings</span>
           </button>
+
+          {/* Divider */}
+          <div className="my-1 border-t border-gray-100"></div>
 
           {/* Logout */}
           <button
             onClick={onLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-gray-50"
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
           >
-            <HiOutlineLogout className="text-lg" />
-            Logout
+            <HiOutlineLogout className="text-xl" />
+            <span className="font-semibold">Logout</span>
           </button>
         </div>
       )}

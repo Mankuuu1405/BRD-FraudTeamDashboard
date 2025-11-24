@@ -24,14 +24,14 @@ export default function ReportGenerator({ onGenerate }) {
           type="date"
           value={from}
           onChange={(e) => setFrom(e.target.value)}
-          className="p-2 border rounded-lg"
+          className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
 
         <input
           type="date"
           value={to}
           onChange={(e) => setTo(e.target.value)}
-          className="p-2 border rounded-lg"
+          className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
 
         <button

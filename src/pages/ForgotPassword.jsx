@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -28,46 +29,71 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-96"
-      >
-        <h2 className="text-2xl font-semibold mb-6 text-center">
-          Forgot Password
-        </h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Forgot Password
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Enter your email to receive a password reset link
+          </p>
+        </div>
 
         {!submitted ? (
           <>
-            <input
-              type="email"
-              placeholder="Enter your registered email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Email Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  required
+                />
+              </div>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
-            >
-              Send Reset Link
-            </button>
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-primary-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition shadow-md hover:shadow-lg"
+              >
+                Send Reset Link
+              </button>
+            </form>
 
-            <div className="text-center mt-4">
-              <Link to="/login" className="text-sm text-blue-600 hover:underline">
-                Back to Login
+            {/* Back to Login */}
+            <div className="text-center mt-6">
+              <Link
+                to="/login"
+                className="text-sm text-primary-blue hover:text-blue-800 font-semibold"
+              >
+                ← Back to Login
               </Link>
             </div>
           </>
         ) : (
-          <p className="text-center text-green-600 font-medium">
-            ✔ Reset link sent! (Dummy)  
-            <br />
-            Redirecting to login...
-          </p>
+          /* Success Message */
+          <div className="text-center py-6">
+            <AiOutlineCheckCircle className="text-6xl text-green-500 mx-auto mb-4" />
+            <p className="text-gray-800 font-semibold text-lg mb-2">
+              Reset Link Sent!
+            </p>
+            <p className="text-gray-500 text-sm">
+              Check your email for password reset instructions.
+              <br />
+              Redirecting to login...
+            </p>
+          </div>
         )}
-      </form>
+      </div>
     </div>
   );
 }

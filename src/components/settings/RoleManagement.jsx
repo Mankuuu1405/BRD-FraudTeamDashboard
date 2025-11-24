@@ -10,7 +10,7 @@ export default function RoleManagement() {
 
       <div className="flex gap-3">
         <input
-          className="border rounded-lg p-2 flex-1"
+          className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition p-2 flex-1"
           placeholder="New Role Name"
           value={newRole}
           onChange={(e) => setNewRole(e.target.value)}
@@ -28,10 +28,11 @@ export default function RoleManagement() {
       </div>
 
       <ul className="text-sm space-y-2">
+        <h3 className="text-base font-semibold">Current Roles</h3>
         {roles.map((role) => (
           <li
             key={role}
-            className="px-3 py-2 border rounded-lg bg-gray-50"
+            className="px-3 py-2 border rounded-lg bg-primary-blue text-white border-gray-300"
           >
             {role}
           </li>

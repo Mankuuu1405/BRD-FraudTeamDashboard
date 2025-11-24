@@ -15,22 +15,22 @@ import CaseDetails from "./pages/CaseDetails";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import SignUp from "./pages/SignUp";
 
 import { HiMenu } from "react-icons/hi";
-import SignUp from "./pages/SignUp";
 
 export default function App() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Routes where sidebar is hidden
-  const hideSidebarRoutes = ["/login", "/forgot-password", "/signup"];
+  // Routes where sidebar + header should be hidden
+  const hideSidebarRoutes = ["/login", "/forgot-password", "/signup", "/"];
   const hideSidebar = hideSidebarRoutes.includes(location.pathname);
 
   // Page title logic
   const path = location.pathname;
   const pageTitle =
-    path === "/" ? "Dashboard" :
+    path === "/home" ? "Dashboard" :
     path.startsWith("/cases/") ? "Case Details" :
     path === "/cases" ? "Cases" :
     path === "/analytics" ? "Analytics" :
@@ -41,7 +41,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-100 flex">
 
-      {/* SIDEBAR (hidden on login + forgot-password) */}
+      {/* SIDEBAR (hidden on auth pages) */}
       {!hideSidebar && (
         <>
           {/* Mobile Sidebar Overlay */}
@@ -65,7 +65,7 @@ export default function App() {
         </>
       )}
 
-      {/* MAIN AREA - REMOVED md:ml-64 */}
+      {/* MAIN AREA */}
       <div className="flex-1 flex flex-col min-w-0">
 
         {/* Mobile Menu Button */}
@@ -80,46 +80,75 @@ export default function App() {
           </button>
         )}
 
-        {/* HEADER (hidden on login) */}
+        {/* HEADER */}
         {!hideSidebar && <Header title={pageTitle} />}
 
         {/* PAGE CONTENT */}
         <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6">
           <Routes>
+
+            {/* SIGNUP = DEFAULT HOME PAGE */}
+            <Route path="/" element={<SignUp />} />
+
+            {/* AUTH ROUTES */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/signup" element={<SignUp />} />
+
+            {/* PROTECTED ROUTES */}
             <Route
-              path="/"
-              element={<ProtectedRoute><Home /></ProtectedRoute>}
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
             />
 
             <Route
               path="/cases"
-              element={<ProtectedRoute><Cases /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <Cases />
+                </ProtectedRoute>
+              }
             />
 
             <Route
               path="/cases/:caseId"
-              element={<ProtectedRoute><CaseDetails /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <CaseDetails />
+                </ProtectedRoute>
+              }
             />
 
             <Route
               path="/reports"
-              element={<ProtectedRoute><Reports /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <Reports />
+                </ProtectedRoute>
+              }
             />
 
             <Route
               path="/analytics"
-              element={<ProtectedRoute><Analytics /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
             />
 
             <Route
               path="/settings"
-              element={<ProtectedRoute><Settings /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
             />
-
-            {/* Non-protected routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </div>
       </div>
