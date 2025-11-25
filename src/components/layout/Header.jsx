@@ -13,7 +13,7 @@ export default function Header({ title }) {
   return (
     <>
       <div className="bg-white shadow-sm px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-30">
-        <h1 className="text-xl font-semibold">{title}</h1>
+        <h1 className="text-2xl font-semibold">{title}</h1>
 
         <ProfileDropdown
           user={user}

@@ -17,7 +17,7 @@ export default function ReportGenerator({ onGenerate }) {
 
   return (
     <div className="bg-white p-4 rounded-xl shadow mb-6">
-      <h2 className="text-lg font-bold mb-4">Select Date Range</h2>
+      <h2 className="text-xl font-bold mb-4">Select Date Range</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         <input

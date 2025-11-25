@@ -11,7 +11,7 @@ export default function RiskCategoryPie() {
 
   return (
     <div className="bg-white p-4 rounded-xl shadow">
-      <h2 className="text-lg font-bold mb-4">Risk Category Breakdown</h2>
+      <h2 className="text-xl font-bold mb-4">Risk Category Breakdown</h2>
 
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
 

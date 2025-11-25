@@ -11,7 +11,7 @@ export default function AMLTrendChart() {
 
   return (
     <div className="bg-white p-4 rounded-xl shadow">
-      <h2 className="text-lg font-bold mb-4">AML Sanction Hits (Weekly)</h2>
+      <h2 className="text-xl font-bold mb-4">AML Sanction Hits (Weekly)</h2>
 
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={data}>

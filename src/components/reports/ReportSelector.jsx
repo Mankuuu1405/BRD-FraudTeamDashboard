@@ -8,7 +8,7 @@ export default function ReportSelector({ selected, setSelected }) {
 
   return (
     <div className="bg-white p-4 rounded-xl shadow mb-6">
-      <h2 className="text-lg font-bold mb-4">Select Report Type</h2>
+      <h2 className="text-xl font-bold mb-4">Select Report Type</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {types.map((t) => (

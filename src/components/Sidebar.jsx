@@ -47,7 +47,7 @@ export default function Sidebar({ open, setOpen }) {
           </div>
 
           <div>
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Fraud Dashboard
             </h2>
             <p className="text-xs text-gray-500">Admin Panel</p>
@@ -80,7 +80,7 @@ export default function Sidebar({ open, setOpen }) {
               `
             }
           >
-            <item.icon className="text-xl flex-shrink-0" />
+            <item.icon className="text-2xl flex-shrink-0" />
             <span>{item.name}</span>
           </NavLink>
         ))}
@@ -99,7 +99,7 @@ export default function Sidebar({ open, setOpen }) {
             text-sm font-normal transition-colors
           "
         >
-          <MdLogout className="text-xl flex-shrink-0" />
+          <MdLogout className="text-2xl flex-shrink-0" />
           <span>Logout</span>
         </button>
       </div>
