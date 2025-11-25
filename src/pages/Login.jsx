@@ -92,7 +92,7 @@ export default function Login() {
 
             <Link
               to="/forgot-password"
-              className="text-sm text-primary-blue hover:text-blue-700 font-medium"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
               Forgot Password?
             </Link>
@@ -101,7 +101,7 @@ export default function Login() {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-primary-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition shadow-md hover:shadow-lg"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md hover:shadow-lg"
           >
             Login
           </button>
@@ -113,7 +113,7 @@ export default function Login() {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="text-primary-blue hover:text-blue-700 font-semibold"
+              className="text-blue-600 hover:text-blue-700 font-semibold"
             >
               Sign Up
             </Link>

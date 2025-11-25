@@ -24,7 +24,7 @@ export default function SecuritySettings() {
 
           <button
             onClick={() => toast.success("Email updated")}
-            className="px-4 py-2 bg-primary-blue text-white rounded-lg text-sm self-start"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
           >
             Update
           </button>
@@ -55,7 +55,7 @@ export default function SecuritySettings() {
                 ? toast.success("Password updated")
                 : toast.error("Passwords do not match")
             }
-            className="px-4 py-2 bg-primary-blue text-white rounded-lg text-sm w-fit"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg w-1/3"
           >
             Update
           </button>

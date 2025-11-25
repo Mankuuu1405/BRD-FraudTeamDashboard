@@ -3,6 +3,7 @@ import NotificationSettings from "../components/settings/NotificationSettings";
 import SecuritySettings from "../components/settings/SecuritySettings";
 import RoleManagement from "../components/settings/RoleManagement";
 import PermissionMatrix from "../components/settings/PermissionMatrix";
+import RolesAndPermissions from "../components/settings/RolesAndPermission";
 
 export default function Settings() {
   return (
@@ -10,8 +11,7 @@ export default function Settings() {
       <AccountSettings />
       <NotificationSettings />
       <SecuritySettings />
-      <RoleManagement />
-      <PermissionMatrix />
+      <RolesAndPermissions />
     </div>
   );
 }

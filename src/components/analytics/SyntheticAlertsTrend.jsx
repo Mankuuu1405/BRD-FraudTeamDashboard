@@ -18,7 +18,7 @@ export default function SyntheticAlertsTrend() {
           <XAxis dataKey="day" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="hits" stroke="#dc2626" strokeWidth={2} />
+          <Line type="monotone" dataKey="hits" stroke="#dc2626" strokeWidth={3} />
         </LineChart>
       </ResponsiveContainer>
     </div>

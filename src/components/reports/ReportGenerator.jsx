@@ -36,7 +36,7 @@ export default function ReportGenerator({ onGenerate }) {
 
         <button
           onClick={handleGenerate}
-          className="px-4 py-2 bg-primary-blue text-white rounded-lg"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
         >
           {loading ? "Generating..." : "Generate"}
         </button>

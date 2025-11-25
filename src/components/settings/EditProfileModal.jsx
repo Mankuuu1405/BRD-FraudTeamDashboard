@@ -57,7 +57,7 @@ export default function EditProfileModal({ open, onClose }) {
           </button>
 
           <button
-            className="px-6 py-3 bg-primary-blue text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-md hover:shadow-lg"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
             onClick={handleSave}
           >
             Save Changes

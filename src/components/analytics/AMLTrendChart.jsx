@@ -18,7 +18,7 @@ export default function AMLTrendChart() {
           <XAxis dataKey="day" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="hits" stroke="#2563eb" strokeWidth={2} />
+          <Line type="monotone" dataKey="hits" stroke="#2563eb" strokeWidth={3} />
         </LineChart>
       </ResponsiveContainer>
     </div>
