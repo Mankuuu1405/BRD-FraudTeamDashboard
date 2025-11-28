@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function ReportTable({ data, onExportCSV, onExportPDF }) {
   if (!data.length)
     return <p className="text-gray-500 text-sm">No report generated yet.</p>;

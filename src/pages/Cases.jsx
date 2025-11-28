@@ -1,29 +1,12 @@
 import { useState, useEffect } from "react";
 import CasesTable from "../components/cases/CasesTable";
+import { getCases } from "../api/caseApi";
 
 export default function Cases() {
   const [cases, setCases] = useState([]);
 
-  // MOCK DATA FOR NOW — Replace with API later
   useEffect(() => {
-    setCases([
-      {
-        id: "CASE-001",
-        name: "Ravi Sharma",
-        fraudScore: 82,
-        aml: "CLEAR",
-        synthetic: "SUSPECT",
-        updated: "2 min ago",
-      },
-      {
-        id: "CASE-002",
-        name: "Aditya Singh",
-        fraudScore: 45,
-        aml: "HIT",
-        synthetic: "CLEAN",
-        updated: "10 min ago",
-      },
-    ]);
+    getCases().then(setCases);
   }, []);
 
   return (

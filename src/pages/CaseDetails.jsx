@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import VerificationAccordion from "../components/cases/VerificationAccordion";
 import RiskTag from "../components/ui/RiskTag";
 import StatusTag from "../components/ui/StatusTag";
@@ -8,45 +9,15 @@ import PatternTag from "../components/ui/PatternTag";
 import BehaviorTag from "../components/ui/BehaviorTag";
 import CaseTimeline from "../components/cases/CasesTimeline";
 
+import { getCaseDetails } from "../api/caseDetailsApi";
+
 export default function CaseDetails() {
   const { caseId } = useParams();
   const navigate = useNavigate();
   const [caseData, setCaseData] = useState(null);
 
   useEffect(() => {
-    const mock = {
-      id: caseId,
-      applicant: {
-        name: "Ravi Sharma",
-        mobile: "9999999999",
-        pan: "ABCDE1234F",
-      },
-      fraudEngine: {
-        fraudScore: 78,
-        syntheticId: "SUSPECT",
-        aml: "CLEAR",
-        behavioral: "HIGH RISK",
-        pattern: "MATCH FOUND",
-      },
-      verifications: {
-        kyc: { panMatch: true, aadhaarMatch: false },
-        biometrics: { faceMatch: 82, liveness: true },
-        geo: { negativeArea: false },
-        financial: { incomeConfidence: 0.52 },
-        bureau: { cibil: 620, blacklist: false },
-        blockchain: { identityHashMatch: true },
-      },
-      workflow: {
-        status: "REVIEW",
-      },
-      progressStage: 4,
-      audit: [
-        { id: 1, action: "Fraud score calculated", ts: "2025-06-12 10:05 AM" },
-        { id: 2, action: "AML screening completed", ts: "2025-06-12 10:06 AM" },
-      ]
-    };
-
-    setCaseData(mock);
+    getCaseDetails(caseId).then(setCaseData);
   }, [caseId]);
 
   const handleAction = (newStatus) => {
@@ -79,22 +50,24 @@ export default function CaseDetails() {
 
         {/* Summary */}
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
-          <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Case #{caseData.id}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+            Case #{caseData.id}
+          </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-sm">
             <div>
               <p className="font-medium text-gray-600">Name</p>
-              <p className="break-words">{caseData.applicant.name}</p>
+              <p>{caseData.applicant.name}</p>
             </div>
 
             <div>
               <p className="font-medium text-gray-600">Mobile</p>
-              <p className="break-words">{caseData.applicant.mobile}</p>
+              <p>{caseData.applicant.mobile}</p>
             </div>
 
             <div>
               <p className="font-medium text-gray-600">PAN</p>
-              <p className="break-words">{caseData.applicant.pan}</p>
+              <p>{caseData.applicant.pan}</p>
             </div>
 
             <div>
@@ -180,7 +153,6 @@ export default function CaseDetails() {
         {/* Audit */}
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
           <h2 className="text-lg font-bold mb-4">Audit Trail</h2>
-
           <div className="space-y-2">
             {caseData.audit
               .slice()
