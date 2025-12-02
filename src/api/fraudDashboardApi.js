@@ -1,13 +1,10 @@
-console.log("fraudDashboardApi.js LOADED FROM:", import.meta.url);
-
-import axios from "axios";
+import api from "./axiosInstance";
 import { dashboardMock } from "./mock/dashboardMock";
 
 export const getFraudDashboard = async () => {
   try {
-    const response = await axios.get("/fraud/dashboard");
+    const response = await api.get("/fraud/dashboard");
 
-    // Detect Vite serving index.html instead of JSON
     if (
       typeof response.data === "string" &&
       response.data.toLowerCase().startsWith("<!doctype")

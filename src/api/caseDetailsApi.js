@@ -1,9 +1,9 @@
-import axios from "axios";
+import api from "./axiosInstance";
 import { caseDetailsMockData } from "./mock/caseDetailsMock";
 
 export const getCaseDetails = async (caseId) => {
   try {
-    const response = await axios.get(`/fraud/cases/${caseId}`);
+    const response = await api.get(`/fraud/cases/${caseId}`);
 
     // Vite returning HTML fallback
     if (

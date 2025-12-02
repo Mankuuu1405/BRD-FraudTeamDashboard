@@ -1,9 +1,9 @@
-import axios from "axios";
+import api from "./axiosInstance";
 import { analyticsMock } from "./mock/analyticsMock";
 
 export const getAnalyticsData = async () => {
   try {
-    const response = await axios.get("/fraud/analytics");
+    const response = await api.get("/fraud/analytics");
 
     // Vite serving HTML instead of API response
     if (

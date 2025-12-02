@@ -1,9 +1,9 @@
-import axios from "axios";
+import api from "./axiosInstance";
 import { casesMock } from "./mock/caseMock";
 
 export const getCases = async () => {
   try {
-    const response = await axios.get("/fraud/cases");
+    const response = await api.get("/fraud/cases");
 
     if (
       typeof response.data === "string" &&
