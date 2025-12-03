@@ -38,10 +38,10 @@ export default function Sidebar({ open, setOpen }) {
       `}
     >
       {/* HEADER */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-sm">
-            <ShieldCheckIcon className="h-5 w-5 text-white" />
+          <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-sm">
+            <ShieldCheckIcon className="h-6 w-6 text-white" />
           </div>
 
           <div>
