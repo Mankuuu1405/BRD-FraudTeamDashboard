@@ -1,13 +1,15 @@
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
-  HiHome,
-  HiClipboard,
-  HiChartSquareBar,
-  HiDocumentText,
-  HiCog,
-} from "react-icons/hi";
-import { IoClose } from "react-icons/io5";
-import { MdLogout } from "react-icons/md";
+  HomeIcon,
+  DocumentTextIcon,
+  ClipboardDocumentListIcon,
+  ChartBarIcon,
+  Cog6ToothIcon,
+  ArrowLeftOnRectangleIcon,
+  XMarkIcon,
+  ShieldCheckIcon
+} from "@heroicons/react/24/outline";
 
 export default function Sidebar({ open, setOpen }) {
   const navigate = useNavigate();
@@ -18,11 +20,11 @@ export default function Sidebar({ open, setOpen }) {
   };
 
   const menu = [
-    { name: "Home", icon: HiHome, path: "/home" },
-    { name: "Cases", icon: HiClipboard, path: "/cases" },
-    { name: "Reports", icon: HiDocumentText, path: "/reports" },
-    { name: "Analytics", icon: HiChartSquareBar, path: "/analytics" },
-    { name: "Settings", icon: HiCog, path: "/settings" },
+    { name: "Home", icon: HomeIcon, path: "/home" },
+    { name: "Cases", icon: ClipboardDocumentListIcon, path: "/cases" },
+    { name: "Reports", icon: DocumentTextIcon, path: "/reports" },
+    { name: "Analytics", icon: ChartBarIcon, path: "/analytics" },
+    { name: "Settings", icon: Cog6ToothIcon, path: "/settings" },
   ];
 
   return (
@@ -32,18 +34,14 @@ export default function Sidebar({ open, setOpen }) {
         h-screen w-64 flex flex-col
         bg-white border-r border-gray-200
         transition-transform duration-300
-        ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}
     >
-      {/* HEADER LOGO AREA */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
-        {/* Logo + Text */}
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          {/* Round icon box matching theme */}
-          <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clipRule="evenodd" />
-            </svg>
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-sm">
+            <ShieldCheckIcon className="h-5 w-5 text-white" />
           </div>
 
           <div>
@@ -54,10 +52,13 @@ export default function Sidebar({ open, setOpen }) {
           </div>
         </div>
 
-        {/* Mobile close button */}
+        {/* Mobile close */}
         {open && (
-          <button onClick={() => setOpen(false)} className="md:hidden text-gray-400 hover:text-gray-600">
-            <IoClose className="text-2xl" />
+          <button
+            onClick={() => setOpen(false)}
+            className="md:hidden text-gray-400 hover:text-gray-600"
+          >
+            <XMarkIcon className="h-6 w-6" />
           </button>
         )}
       </div>
@@ -80,13 +81,13 @@ export default function Sidebar({ open, setOpen }) {
               `
             }
           >
-            <item.icon className="text-2xl flex-shrink-0" />
+            <item.icon className="h-6 w-6 flex-shrink-0" />
             <span>{item.name}</span>
           </NavLink>
         ))}
       </nav>
 
-      {/* LOGOUT BUTTON */}
+      {/* LOGOUT */}
       <div className="px-4 pb-6 border-t border-gray-200 pt-4">
         <button
           onClick={() => {
@@ -99,7 +100,7 @@ export default function Sidebar({ open, setOpen }) {
             text-sm font-normal transition-colors
           "
         >
-          <MdLogout className="text-2xl flex-shrink-0" />
+          <ArrowLeftOnRectangleIcon className="h-6 w-6 flex-shrink-0" />
           <span>Logout</span>
         </button>
       </div>
