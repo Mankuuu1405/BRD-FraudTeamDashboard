@@ -3,12 +3,12 @@ import { getFraudDashboard } from "../api/fraudDashboardApi";
 
 import StatCard from "../components/dashboard/StatCard";
 import {
-  HiShieldExclamation,
-  HiUserGroup,
-  HiCreditCard,
-  HiDocumentText,
-  HiCurrencyRupee
-} from "react-icons/hi";
+  ShieldExclamationIcon,
+  UserGroupIcon,
+  CreditCardIcon,
+  DocumentTextIcon,
+  BanknotesIcon,
+} from "@heroicons/react/24/outline";
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -19,22 +19,19 @@ export default function Home() {
 
   if (!data) return <p>Loading...</p>;
 
-  console.log("HOME → data:", data);
-  console.log("HOME → stats:", data?.stats);
-
   const { stats, summary, highRiskApplicants, alerts } = data;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6"> 
 
-      {/* Top Engine Cards */}
+      {/* Top Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
 
         <StatCard
           title="Fraud Score"
           value={stats.fraudScore}
           subtext="Updated 2 mins ago"
-          icon={HiShieldExclamation}
+          icon={ShieldExclamationIcon}
           trend={stats.fraudTrend}
         />
 
@@ -42,7 +39,7 @@ export default function Home() {
           title="Synthetic ID Alerts"
           value={stats.syntheticAlerts}
           subtext="3 new today"
-          icon={HiUserGroup}
+          icon={UserGroupIcon}
           trend={stats.syntheticTrend}
         />
 
@@ -50,7 +47,7 @@ export default function Home() {
           title="AML Hits"
           value={stats.amlHits}
           subtext="1 unresolved"
-          icon={HiCreditCard}
+          icon={CreditCardIcon}
           trend={stats.amlTrend}
         />
 
@@ -58,7 +55,7 @@ export default function Home() {
           title="Behavioral Flags"
           value={stats.behavioralFlags}
           subtext="Detected this week"
-          icon={HiDocumentText}
+          icon={DocumentTextIcon}
           trend={stats.behavioralTrend}
         />
 
@@ -66,10 +63,9 @@ export default function Home() {
           title="Pattern Matches"
           value={stats.patternMatches}
           subtext="High-risk patterns found"
-          icon={HiCurrencyRupee}
+          icon={BanknotesIcon}
           trend={stats.patternTrend}
         />
-
       </div>
 
       {/* Summary Cards */}

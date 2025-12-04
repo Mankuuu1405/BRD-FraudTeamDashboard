@@ -6,6 +6,7 @@ import RolesAndPermissions from "../components/settings/RolesAndPermission";
 export default function Settings() {
   return (
     <div className="space-y-8">
+      <h2 className="text-xl font-bold text-gray-700">Settings</h2>
       <AccountSettings />
       <NotificationSettings />
       <SecuritySettings />

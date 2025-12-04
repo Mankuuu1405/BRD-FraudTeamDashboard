@@ -39,6 +39,7 @@ export default function CaseDetails() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <h2 className="text-xl font-bold text-gray-700">Home</h2>
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
         <button

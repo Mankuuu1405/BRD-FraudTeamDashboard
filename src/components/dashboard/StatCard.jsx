@@ -4,11 +4,11 @@ export default function StatCard({ title, value, subtext, icon: Icon, trend }) {
       {/* Header with Icon and Trend */}
       <div className="flex items-start justify-between mb-3">
         <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-          {Icon && <Icon className="text-xl text-blue-600" />}
+          {Icon && <Icon className="h-6 w-6 text-blue-600" />}
         </div>
         {trend && (
           <span className={`text-xs font-semibold px-2 py-1 rounded ${
-            trend.startsWith('+') ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'
+            trend.startsWith('+') ? 'text-green-600' : 'text-red-600'
           }`}>
             {trend}
           </span>

@@ -81,6 +81,8 @@ export default function Reports() {
   return (
     <div className="space-y-6">
 
+      <h2 className="text-xl font-bold text-gray-700">Reports</h2>
+
       <ReportSelector
         selected={selectedReport}
         setSelected={setSelectedReport}
