@@ -7,36 +7,32 @@ export default function ReportGenerator({ onGenerate }) {
 
   const handleGenerate = () => {
     if (!from || !to) return alert("Please select both dates");
-
     setLoading(true);
-
-    onGenerate(from, to, () => {
-      setLoading(false);
-    });
+    onGenerate(from, to, () => setLoading(false));
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow mb-6">
-      <h2 className="text-xl font-bold mb-4">Select Date Range</h2>
+    <div>
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">Select Date Range</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <input
           type="date"
           value={from}
           onChange={(e) => setFrom(e.target.value)}
-          className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="h-9 rounded-lg border border-gray-300 px-3 text-sm"
         />
 
         <input
           type="date"
           value={to}
           onChange={(e) => setTo(e.target.value)}
-          className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="h-9 rounded-lg border border-gray-300 px-3 text-sm"
         />
 
         <button
           onClick={handleGenerate}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+          className="h-9 px-3 rounded-lg bg-blue-600 text-white text-sm"
         >
           {loading ? "Generating..." : "Generate"}
         </button>

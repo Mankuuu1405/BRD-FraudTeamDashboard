@@ -15,12 +15,12 @@ export default function Header() {
       <div className="bg-white shadow-sm px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-30">
 
         {/* Static Dashboard Title */}
-        <h1 className="font-semibold text-gray-900">
+        <h1 className="text-base font-semibold text-gray-900">
           Fraud Team Dashboard
         </h1>
 
         {/* Static Dashboard Subtitle */}
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-sm text-gray-600">
           Fraud Risk Monitoring & Analysis
         </p>
 

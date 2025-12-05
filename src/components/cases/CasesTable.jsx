@@ -1,55 +1,68 @@
 import RiskBadge from "../ui/RiskBadge";
 import { Link } from "react-router-dom";
 
+const statusPill = (label, type) => {
+  const map = {
+    hit: "bg-red-50 text-red-700 border-red-200",
+    clear: "bg-green-50 text-green-700 border-green-200",
+    suspect: "bg-red-50 text-red-700 border-red-200",
+    clean: "bg-green-50 text-green-700 border-green-200"
+  };
+
+  return (
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs border ${map[type]}`}>
+      {label}
+    </span>
+  );
+};
+
 export default function CasesTable({ data }) {
   return (
-    <div className="bg-white shadow rounded-xl overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50">
-            <tr className="text-gray-600 text-sm border-b">
-              <th className="py-4 px-4 font-medium">Case ID</th>
-              <th className="py-4 px-4 font-medium">Applicant</th>
-              <th className="py-4 px-4 font-medium">Fraud Score</th>
-              <th className="py-4 px-4 font-medium">AML</th>
-              <th className="py-4 px-4 font-medium">Synthetic ID</th>
-              <th className="py-4 px-4 font-medium">Updated</th>
-              <th className="py-4 px-4 font-medium"></th>
+        <table className="min-w-full table-fixed text-sm">
+          <thead className="bg-gray-50 text-gray-600">
+            <tr className="border-b border-gray-200">
+              <th className="px-5 py-3 text-left align-middle font-medium">Case ID</th>
+              <th className="px-5 py-3 text-left align-middle font-medium">Applicant</th>
+              <th className="px-5 py-3 text-left align-middle font-medium">Fraud Score</th>
+              <th className="px-5 py-3 text-left align-middle font-medium">AML</th>
+              <th className="px-5 py-3 text-left align-middle font-medium">Synthetic ID</th>
+              <th className="px-5 py-3 text-left align-middle font-medium">Updated</th>
+              <th className="px-5 py-3 text-left align-middle font-medium"></th>
             </tr>
           </thead>
 
           <tbody>
             {data.map((item) => (
-              <tr key={item.id} className="border-b hover:bg-gray-50">
-                <td className="py-4 px-4 text-sm font-medium">{item.id}</td>
-                <td className="py-4 px-4 text-sm">{item.name}</td>
+              <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <td className="px-5 py-3 align-middle text-gray-800 font-medium">{item.id}</td>
+                <td className="px-5 py-3 align-middle text-gray-700">{item.name}</td>
 
-                <td className="py-4 px-4">
-                  <RiskBadge score={item.fraudScore} />
+                <td className="px-5 py-3 align-middle">
+                  <div className="inline-block">
+                    <RiskBadge score={item.fraudScore} />
+                  </div>
                 </td>
 
-                <td className="py-4 px-4 text-sm">
-                  {item.aml === "HIT" ? (
-                    <span className="text-red-600 font-semibold">Sanction Hit</span>
-                  ) : (
-                    <span className="text-green-600">Clear</span>
-                  )}
+                <td className="px-5 py-3 align-middle">
+                  {item.aml === "HIT"
+                    ? statusPill("Sanction Hit", "hit")
+                    : statusPill("Clear", "clear")}
                 </td>
 
-                <td className="py-4 px-4 text-sm">
-                  {item.synthetic === "SUSPECT" ? (
-                    <span className="text-red-600 font-semibold">Suspect</span>
-                  ) : (
-                    <span className="text-green-600">Clean</span>
-                  )}
+                <td className="px-5 py-3 align-middle">
+                  {item.synthetic === "SUSPECT"
+                    ? statusPill("Suspect", "suspect")
+                    : statusPill("Clean", "clean")}
                 </td>
 
-                <td className="py-4 px-4 text-sm text-gray-500">{item.updated}</td>
+                <td className="px-5 py-3 align-middle text-gray-500">{item.updated}</td>
 
-                <td className="py-4 px-4 text-sm">
+                <td className="px-5 py-3 align-middle">
                   <Link
                     to={`/cases/${item.id}`}
-                    className="text-primary-blue font-medium hover:underline"
+                    className="text-primary-blue hover:underline"
                   >
                     View
                   </Link>
