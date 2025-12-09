@@ -37,7 +37,7 @@ export default function Sidebar({ open, setOpen }) {
         ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}
     >
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+      <div className="flex items-center justify-between px-4 py-[18px] border-b border-gray-100">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center">
             <ShieldCheckIcon className="h-6 w-6 text-white" />
