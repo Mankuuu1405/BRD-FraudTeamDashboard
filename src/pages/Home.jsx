@@ -94,7 +94,7 @@ export default function Home() {
               {highRiskApplicants.map((a) => (
                 <tr
                   key={a.id}
-                  className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
+                  className="border-t border-gray-100"
                 >
                   <td className="px-5 py-3 text-gray-700">{a.id}</td>
 

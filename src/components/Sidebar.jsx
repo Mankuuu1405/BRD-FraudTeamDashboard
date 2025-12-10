@@ -14,18 +14,30 @@ import {
 export default function Sidebar({ open, setOpen }) {
   const navigate = useNavigate();
 
+  // Get user + role safely
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const role = user.role || "Viewer";
+
   const handleLogout = () => {
     localStorage.removeItem("loggedIn");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
+  // ROLE-BASED MENU VISIBILITY
   const menu = [
-    { name: "Dashboard", icon: HomeIcon, path: "/home" },
-    { name: "Cases", icon: ClipboardDocumentListIcon, path: "/cases" },
-    { name: "Reports", icon: DocumentTextIcon, path: "/reports" },
-    { name: "Analytics", icon: ChartBarIcon, path: "/analytics" },
-    { name: "Settings", icon: Cog6ToothIcon, path: "/settings" }
+    { name: "Dashboard", icon: HomeIcon, path: "/home", roles: ["SuperAdmin", "Investigator", "Viewer"] },
+    { name: "Cases", icon: ClipboardDocumentListIcon, path: "/cases", roles: ["SuperAdmin", "Investigator", "Viewer"] },
+    { name: "Reports", icon: DocumentTextIcon, path: "/reports", roles: ["SuperAdmin", "Investigator"] },
+    { name: "Analytics", icon: ChartBarIcon, path: "/analytics", roles: ["SuperAdmin"] },
+    { name: "Roles & Permissions", icon: Cog6ToothIcon, path: "/roles", roles: ["SuperAdmin"] },
+
+    // Settings: Access allowed for ALL ROLES
+    { name: "Settings", icon: Cog6ToothIcon, path: "/settings", roles: ["SuperAdmin", "Investigator", "Viewer"] }
   ];
+
+  // Filter menu based on role
+  const filteredMenu = menu.filter(item => item.roles.includes(role));
 
   return (
     <div
@@ -37,6 +49,7 @@ export default function Sidebar({ open, setOpen }) {
         ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}
     >
+      {/* TOP SECTION */}
       <div className="flex items-center justify-between px-4 py-[18px] border-b border-gray-100">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center">
@@ -44,7 +57,7 @@ export default function Sidebar({ open, setOpen }) {
           </div>
           <div>
             <h2 className="text-base font-semibold text-gray-900">Fraud Dashboard</h2>
-            <p className="text-xs text-gray-500">Admin Panel</p>
+            <p className="text-xs text-gray-500">{role}</p>
           </div>
         </div>
 
@@ -58,8 +71,9 @@ export default function Sidebar({ open, setOpen }) {
         )}
       </div>
 
+      {/* MENU */}
       <nav className="flex-1 py-3 overflow-y-auto">
-        {menu.map(item => (
+        {filteredMenu.map(item => (
           <NavLink
             key={item.name}
             to={item.path}
@@ -82,6 +96,7 @@ export default function Sidebar({ open, setOpen }) {
         ))}
       </nav>
 
+      {/* LOGOUT */}
       <div className="p-2 border-t border-gray-100">
         <button
           onClick={() => {

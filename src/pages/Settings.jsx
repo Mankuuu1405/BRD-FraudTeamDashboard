@@ -1,9 +1,12 @@
 import AccountSettings from "../components/settings/AccountSettings";
 import NotificationSettings from "../components/settings/NotificationSettings";
 import SecuritySettings from "../components/settings/SecuritySettings";
-import RolesAndPermissions from "../components/settings/RolesAndPermission";
+import { getCurrentUser } from "../utils/auth";
 
 export default function Settings() {
+
+  const user = getCurrentUser();
+  const isSuperAdmin = user?.role === "SuperAdmin";
   return (
     <div className="space-y-6">
 
@@ -14,8 +17,6 @@ export default function Settings() {
         <NotificationSettings />
       
         <SecuritySettings />
-
-        <RolesAndPermissions />
 
     </div>
   );

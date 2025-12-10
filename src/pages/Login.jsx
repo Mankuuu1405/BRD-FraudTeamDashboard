@@ -1,123 +1,123 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ShieldCheckIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { loginUser } from "../api/loginApi";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    if (email === "admin@example.com" && password === "123456") {
-      localStorage.setItem("loggedIn", "true");
-      navigate("/home");
-    } else {
-      alert("Invalid credentials");
+    const result = await loginUser(email, password);
+
+    if (!result || !result.user) {
+      setError("Invalid login");
+      return;
     }
+
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("user", JSON.stringify(result.user));
+
+    navigate("/home");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Login to Your Account
-          </h1>
-          <p className="text-gray-500 text-sm">
-            Sign in to Fraud Analysis Dashboard
-          </p>
-        </div>
+    <div className="fixed inset-0 bg-white grid place-items-center px-4">
+      <div className="w-full max-w-md rounded-2xl border border-primary-200 bg-white shadow-card p-6 animate-fadeIn">
 
-        {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-5">
-          {/* Email Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              required
-            />
+        {/* ICON HEADER */}
+        <div className="grid place-items-center">
+          <div className="h-12 w-12 rounded-full bg-primary-50 grid place-items-center text-primary-600">
+            <ShieldCheckIcon className="h-6 w-6" />
           </div>
 
-          {/* Password Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <div className="relative">
+          <div className="mt-4 text-3xl font-semibold text-gray-900 text-center">
+            Login to Your Account
+          </div>
+
+          <div className="mt-1 text-sm text-gray-600 text-center">
+            Sign in to Fraud Analysis Dashboard
+          </div>
+        </div>
+
+        {error && (
+          <div className="mt-3 bg-primary-50 text-primary-700 border border-primary-200 rounded-lg p-3 text-sm">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="mt-6 space-y-5">
+
+          {/* EMAIL INPUT */}
+          <label className="block">
+            <div className="text-sm text-gray-900">Email</div>
+            <div className="mt-1 relative">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-11 rounded-xl border border-primary-200 px-3 pr-10 
+                focus:outline-none focus:ring-2 focus:ring-primary-300"
+                required
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500">
+                <EnvelopeIcon className="h-5 w-5" />
+              </div>
+            </div>
+          </label>
+
+          {/* PASSWORD INPUT */}
+          <label className="block">
+            <div className="text-sm text-gray-900">Password</div>
+            <div className="mt-1 relative">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition pr-12"
+                className="w-full h-11 rounded-xl border border-primary-200 px-3 pr-10
+                focus:outline-none focus:ring-2 focus:ring-primary-300"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
               >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible className="text-xl" />
-                ) : (
-                  <AiOutlineEye className="text-xl" />
-                )}
+                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>
             </div>
-          </div>
+          </label>
 
-          {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <span className="ml-2 text-sm text-gray-600">Remember Me</span>
-            </label>
-
-            <Link
-              to="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Forgot Password?
-            </Link>
-          </div>
-
-          {/* Login Button */}
+          {/* LOGIN BUTTON */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md hover:shadow-lg"
+            className="h-11 w-full rounded-xl bg-primary-600 hover:bg-primary-700 
+            transition text-white shadow"
           >
-            Login
+            Sign In
           </button>
+
         </form>
 
-        {/* Sign Up Link */}
-        <div className="text-center mt-6">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="text-blue-600 hover:text-blue-700 font-semibold"
-            >
-              Sign Up
-            </Link>
-          </p>
+        {/* SIGNUP LINK */}
+        <div className="mt-6 text-center text-sm">
+          <span className="text-gray-700">Don't have an account? </span>
+          <button
+            onClick={() => navigate("/signup")}
+            className="text-primary-600"
+          >
+            Sign Up
+          </button>
         </div>
       </div>
     </div>
