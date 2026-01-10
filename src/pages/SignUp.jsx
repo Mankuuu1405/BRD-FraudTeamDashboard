@@ -1,170 +1,141 @@
 import React, { useState } from "react";
+import { ShieldCheckIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
-const SignUp = ({ onSwitch, onSignUp }) => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "verifier",
-    });
+export default function SignUp({ onSignUp }) {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-    const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-    const handleSubmit = () => {
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
-            return;
-        }
-        if (formData.name && formData.email && formData.password) {
-            onSignUp(formData);
-        }
-    };
+  const navigate = useNavigate();
 
-    return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
-            <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-                {/* Heading */}
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-                </div>
+  const handleSubmit = () => {
+    setError(null);
+    setSuccess(null);
 
-                {/* Form */}
-                <div className="space-y-5">
+    if (!formData.email || !formData.password || !formData.confirmPassword) {
+      setError("Please fill all fields");
+      return;
+    }
 
-                    {/* Full Name */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Full Name
-                        </label>
-                        <input
-                            type="text"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="John Doe"
-                            value={formData.name}
-                            onChange={(e) =>
-                                setFormData({ ...formData, name: e.target.value })
-                            }
-                        />
-                    </div>
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-                    {/* Email */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Email Address
-                        </label>
-                        <input
-                            type="email"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="you@example.com"
-                            value={formData.email}
-                            onChange={(e) =>
-                                setFormData({ ...formData, email: e.target.value })
-                            }
-                        />
-                    </div>
+    // Your signup logic
+    onSignUp(formData);
 
-                    {/* Role Dropdown (Improved) */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Role
-                        </label>
+    // Show success banner
+    setSuccess("Account created successfully! Redirecting...");
 
-                        <div className="relative">
-                            <select
-                                className="
-                  w-full px-4 py-2 pr-10
-                  border border-gray-300 rounded-lg
-                  focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                  appearance-none
-                "
-                                value={formData.role}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, role: e.target.value })
-                                }
-                            >
-                                <option value="verifier">Reviewer</option>
-                                <option value="kyc">Underwriter</option>
-                                <option value="doc_verification">Analyst</option>
-                            </select>
+    // Redirect after delay
+    setTimeout(() => navigate("/login"), 1000);
+  };
 
-                            {/* Custom dropdown arrow */}
-                            <span
-                                className="
-                  absolute inset-y-0 right-3 flex items-center 
-                  pointer-events-none text-gray-500
-                "
-                            >
-                                ▼
-                            </span>
-                        </div>
-                    </div>
+  return (
+    <div className="fixed inset-0 bg-white grid place-items-center px-4">
+      <div className="w-full max-w-md rounded-2xl border border-primary-200 bg-white shadow-card p-6 animate-fadeIn">
 
-                    {/* Password */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={(e) =>
-                                setFormData({ ...formData, password: e.target.value })
-                            }
-                        />
-                    </div>
+        {/* ICON + HEADING */}
+        <div className="grid place-items-center">
+          <div className="h-12 w-12 rounded-full bg-primary-50 grid place-items-center text-primary-600">
+            <ShieldCheckIcon className="h-6 w-6" />
+          </div>
 
-                    {/* Confirm Password */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Confirm Password
-                        </label>
-                        <input
-                            type="password"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="••••••••"
-                            value={formData.confirmPassword}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    confirmPassword: e.target.value,
-                                })
-                            }
-                        />
-                    </div>
+          <div className="mt-4 text-3xl font-semibold text-gray-900 text-center">
+            Create your account
+          </div>
 
-                    {/* Submit Button */}
-                    <button
-                        onClick={handleSubmit}
-                        className="
-              w-full px-4 py-2 bg-primary-blue text-white rounded-lg 
-              hover:bg-blue-800 transition-colors font-medium
-            "
-                    >
-                        Create Account
-                    </button>
-                </div>
-
-                {/* Switch to login */}
-                <p className="mt-6 text-center text-sm text-gray-600">
-                    Already have an account?{" "}
-                    <button
-                        onClick={() => navigate("/login")}
-                        className="text-blue-600 hover:text-blue-700 font-medium"
-                    >
-                        Sign in
-                    </button>
-                </p>
-            </div>
+          <div className="mt-1 text-sm text-gray-600 text-center">
+            Sign up to access your dashboard
+          </div>
         </div>
-    );
-};
 
-export default SignUp;
+        {/* SUCCESS BANNER */}
+        {success && (
+          <div className="mt-4 bg-primary-50 text-primary-700 border border-primary-200 rounded-lg p-3 text-sm">
+            {success}
+          </div>
+        )}
+
+        {/* ERROR BANNER */}
+        {error && (
+          <div className="mt-4 bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 text-sm">
+            {error}
+          </div>
+        )}
+
+
+        {/* EMAIL */}
+        <label className="block mt-4">
+          <div className="text-sm text-gray-900">Email Address</div>
+          <div className="mt-1 relative">
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full h-11 rounded-xl border border-primary-200 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-300"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-500">
+              <EnvelopeIcon className="h-5 w-5" />
+            </div>
+          </div>
+        </label>
+
+        {/* PASSWORD */}
+        <label className="block mt-4">
+          <div className="text-sm text-gray-900">Password</div>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+            className="mt-1 w-full h-11 rounded-xl border border-primary-200 px-3 focus:outline-none focus:ring-2 focus:ring-primary-300"
+          />
+        </label>
+
+        {/* CONFIRM PASSWORD */}
+        <label className="block mt-4">
+          <div className="text-sm text-gray-900">Confirm Password</div>
+          <input
+            type="password"
+            placeholder="Re-enter your password"
+            value={formData.confirmPassword}
+            onChange={(e) =>
+              setFormData({ ...formData, confirmPassword: e.target.value })
+            }
+            className="mt-1 w-full h-11 rounded-xl border border-primary-200 px-3 focus:outline-none focus:ring-2 focus:ring-primary-300"
+          />
+        </label>
+
+        {/* BUTTON */}
+        <div className="mt-6">
+          <button
+            onClick={handleSubmit}
+            className="h-11 w-full rounded-xl bg-primary-600 hover:bg-primary-700 transition text-white shadow"
+          >
+            Sign Up
+          </button>
+        </div>
+
+        {/* LOGIN LINK */}
+        <div className="mt-6 text-center text-sm">
+          <span className="text-gray-700">Already have an account? </span>
+          <button onClick={() => navigate("/login")} className="text-primary-600">
+            Sign In
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}

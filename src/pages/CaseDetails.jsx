@@ -38,133 +38,133 @@ export default function CaseDetails() {
   if (!caseData) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <h2 className="text-xl font-bold text-gray-700">Home</h2>
-      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold text-gray-800">Case Details</h2>
 
-        <button
-          onClick={() => navigate("/cases")}
-          className="px-3 py-2 text-sm sm:text-base bg-gray-200 rounded-lg hover:bg-gray-300"
-        >
-          ← Back to Cases
-        </button>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/cases")}
+        className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+      >
+        ← Back to Cases
+      </button>
 
-        {/* Summary */}
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
-          <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-            Case #{caseData.id}
-          </h1>
+      {/* Summary */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+          Case #{caseData.id}
+        </h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-sm">
-            <div>
-              <p className="font-medium text-gray-600">Name</p>
-              <p>{caseData.applicant.name}</p>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+          <div>
+            <p className="text-sm font-medium text-gray-600">Name</p>
+            <p className="text-gray-800">{caseData.applicant.name}</p>
+          </div>
 
-            <div>
-              <p className="font-medium text-gray-600">Mobile</p>
-              <p>{caseData.applicant.mobile}</p>
-            </div>
+          <div>
+            <p className="text-sm font-medium text-gray-600">Mobile</p>
+            <p className="text-gray-800">{caseData.applicant.mobile}</p>
+          </div>
 
-            <div>
-              <p className="font-medium text-gray-600">PAN</p>
-              <p>{caseData.applicant.pan}</p>
-            </div>
+          <div>
+            <p className="text-sm font-medium text-gray-600">PAN</p>
+            <p className="text-gray-800">{caseData.applicant.pan}</p>
+          </div>
 
-            <div>
-              <p className="font-medium text-gray-600">Status</p>
-              <p className="text-blue-600 font-semibold">
-                {caseData.workflow.status}
-              </p>
-            </div>
+          <div>
+            <p className="text-sm font-medium text-gray-600">Status</p>
+            <p className="text-primary-blue font-semibold">
+              {caseData.workflow.status}
+            </p>
           </div>
         </div>
-
-        {/* Timeline */}
-        <div className="overflow-x-auto">
-          <CaseTimeline stage={caseData.progressStage} />
-        </div>
-
-        {/* Risk Engine */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
-          <div className="bg-white p-4 shadow rounded-xl">
-            <p className="text-xs text-gray-500 mb-2">Fraud Score</p>
-            <RiskTag score={caseData.fraudEngine.fraudScore} />
-          </div>
-
-          <div className="bg-white p-4 shadow rounded-xl">
-            <p className="text-xs text-gray-500 mb-2">Synthetic ID</p>
-            <StatusTag status={caseData.fraudEngine.syntheticId} />
-          </div>
-
-          <div className="bg-white p-4 shadow rounded-xl">
-            <p className="text-xs text-gray-500 mb-2">AML Screening</p>
-            <StatusTag status={caseData.fraudEngine.aml} />
-          </div>
-
-          <div className="bg-white p-4 shadow rounded-xl">
-            <p className="text-xs text-gray-500 mb-2">Behavioral</p>
-            <BehaviorTag level={caseData.fraudEngine.behavioral} />
-          </div>
-
-          <div className="bg-white p-4 shadow rounded-xl">
-            <p className="text-xs text-gray-500 mb-2">Pattern Match</p>
-            <PatternTag match={caseData.fraudEngine.pattern} />
-          </div>
-        </div>
-
-        {/* Verifications */}
-        <VerificationAccordion verifications={caseData.verifications} />
-
-        {/* Actions */}
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
-          <h2 className="text-lg font-bold mb-4">Actions</h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-            <button
-              onClick={() => handleAction("APPROVED")}
-              className="px-3 py-2 sm:px-4 text-sm sm:text-base bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              Approve
-            </button>
-
-            <button
-              onClick={() => handleAction("UNDERWRITING")}
-              className="px-3 py-2 sm:px-4 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Underwriting
-            </button>
-
-            <button
-              onClick={() => handleAction("REJECTED")}
-              className="px-3 py-2 sm:px-4 text-sm sm:text-base bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-            >
-              Reject
-            </button>
-
-            <button
-              onClick={() => handleAction("BLACKLISTED")}
-              className="px-3 py-2 sm:px-4 text-sm sm:text-base bg-red-600 text-white rounded-lg hover:bg-red-700"
-            >
-              Blacklist
-            </button>
-          </div>
-        </div>
-
-        {/* Audit */}
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
-          <h2 className="text-lg font-bold mb-4">Audit Trail</h2>
-          <div className="space-y-2">
-            {caseData.audit
-              .slice()
-              .reverse()
-              .map((log) => (
-                <AuditEvent key={log.id} action={log.action} ts={log.ts} />
-              ))}
-          </div>
-        </div>
-
       </div>
+
+      {/* Timeline */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+        <CaseTimeline stage={caseData.progressStage} />
+      </div>
+
+      {/* Risk Engine */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <p className="text-xs text-gray-500 mb-1">Fraud Score</p>
+          <RiskTag score={caseData.fraudEngine.fraudScore} />
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <p className="text-xs text-gray-500 mb-1">Synthetic ID</p>
+          <StatusTag status={caseData.fraudEngine.syntheticId} />
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <p className="text-xs text-gray-500 mb-1">AML Screening</p>
+          <StatusTag status={caseData.fraudEngine.aml} />
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <p className="text-xs text-gray-500 mb-1">Behavioral</p>
+          <BehaviorTag level={caseData.fraudEngine.behavioral} />
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <p className="text-xs text-gray-500 mb-1">Pattern Match</p>
+          <PatternTag match={caseData.fraudEngine.pattern} />
+        </div>
+      </div>
+
+      {/* Verifications */}
+      <VerificationAccordion verifications={caseData.verifications} />
+
+      {/* Actions */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Actions</h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <button
+            onClick={() => handleAction("APPROVED")}
+            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Approve
+          </button>
+
+          <button
+            onClick={() => handleAction("UNDERWRITING")}
+            className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Underwriting
+          </button>
+
+          <button
+            onClick={() => handleAction("REJECTED")}
+            className="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+          >
+            Reject
+          </button>
+
+          <button
+            onClick={() => handleAction("BLACKLISTED")}
+            className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Blacklist
+          </button>
+        </div>
+      </div>
+
+      {/* Audit Trail */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Audit Trail</h2>
+
+        <div className="space-y-3">
+          {caseData.audit
+            .slice()
+            .reverse()
+            .map((log) => (
+              <AuditEvent key={log.id} action={log.action} ts={log.ts} />
+            ))}
+        </div>
+      </div>
+
     </div>
   );
 }

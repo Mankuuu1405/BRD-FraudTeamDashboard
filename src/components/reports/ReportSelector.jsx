@@ -7,23 +7,27 @@ export default function ReportSelector({ selected, setSelected }) {
   ];
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow mb-6">
-      <h2 className="text-xl font-bold mb-4">Select Report Type</h2>
+    <div>
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">Select Report Type</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {types.map((t) => (
-          <button
-            key={t}
-            onClick={() => setSelected(t)}
-            className={`p-3 rounded-lg border text-sm ${
-              selected === t
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-gray-50 border-gray-300"
-            }`}
-          >
-            {t}
-          </button>
-        ))}
+      <div className="flex flex-wrap gap-3">
+        {types.map((t) => {
+          const active = selected === t;
+
+          return (
+            <button
+              key={t}
+              onClick={() => setSelected(t)}
+              className={
+                active
+                  ? "h-9 px-4 rounded-full border border-primary-blue/40 bg-primary-blue/10 text-primary-blue text-sm"
+                  : "h-9 px-4 rounded-full border border-gray-200 bg-white text-gray-700 text-sm"
+              }
+            >
+              {t}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
