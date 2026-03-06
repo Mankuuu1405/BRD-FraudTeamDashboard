@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import VerificationAccordion from "../components/cases/VerificationAccordion";
 import RiskTag from "../components/ui/RiskTag";
@@ -9,7 +10,7 @@ import PatternTag from "../components/ui/PatternTag";
 import BehaviorTag from "../components/ui/BehaviorTag";
 import CaseTimeline from "../components/cases/CasesTimeline";
 
-import { getCaseDetails } from "../api/caseDetailsApi";
+import { getCaseDetails, updateCaseStatus } from "../api/caseDetailsApi";
 
 export default function CaseDetails() {
   const { caseId } = useParams();
@@ -20,19 +21,24 @@ export default function CaseDetails() {
     getCaseDetails(caseId).then(setCaseData);
   }, [caseId]);
 
-  const handleAction = (newStatus) => {
-    setCaseData((prev) => ({
-      ...prev,
-      workflow: { status: newStatus },
-      audit: [
-        ...prev.audit,
-        {
-          id: prev.audit.length + 1,
-          action: `Status changed to ${newStatus}`,
-          ts: new Date().toLocaleString(),
-        },
-      ],
-    }));
+  const actionMap = {
+    APPROVED: "approve",
+    UNDERWRITING: "underwriting",
+    REJECTED: "reject",
+    BLACKLISTED: "blacklist",
+  };
+
+  const handleAction = async (newStatus) => {
+    try {
+      const action = actionMap[newStatus];
+      if (!action) return;
+
+      const updatedCase = await updateCaseStatus(caseId, action);
+      setCaseData(updatedCase);
+      toast.success(`Case updated to ${newStatus}`);
+    } catch {
+      toast.error("Failed to update case status");
+    }
   };
 
   if (!caseData) return <div>Loading...</div>;

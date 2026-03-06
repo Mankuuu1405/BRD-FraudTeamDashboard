@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { saveAs } from "file-saver";
 import toast from "react-hot-toast";
 
@@ -6,40 +6,90 @@ import ReportSelector from "../components/reports/ReportSelector";
 import ReportGenerator from "../components/reports/ReportGenerator";
 import ReportTable from "../components/reports/ReportTable";
 
+import { generateReport, getReportHistory } from "../api/reportApi";
+
 export default function Reports() {
   const [selectedReport, setSelectedReport] = useState("Fraud Summary Report");
   const [reportData, setReportData] = useState([]);
+  const [reportHistory, setReportHistory] = useState([]);
+  const [hasGenerated, setHasGenerated] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const reportTypeMap = {
+    "Fraud Summary Report": "FRAUD_SUMMARY",
+    "AML Sanction Report": "AML_SANCTION",
+    "High Risk Applicants": "HIGH_RISK",
+    "Synthetic ID Report": "SYNTHETIC_ID",
+    "All Case Records": "ALL_CASES",
+  };
+
+  const reportTypeLabelMap = {
+    FRAUD_SUMMARY: "Fraud Summary Report",
+    AML_SANCTION: "AML Sanction Report",
+    HIGH_RISK: "High Risk Applicants",
+    SYNTHETIC_ID: "Synthetic ID Report",
+    ALL_CASES: "All Case Records",
+  };
+
+  const loadHistory = async () => {
+    try {
+      const history = await getReportHistory();
+      setReportHistory(history || []);
+    } catch {
+      // Keep current report UX functional even if history fails
+    }
+  };
+
+  useEffect(() => {
+    loadHistory();
+  }, []);
 
   // 1️⃣ GENERATE report (but do NOT export)
-  const handleGenerateReport = (from, to, done) => {
+  const handleGenerateReport = async (from, to, done) => {
+    setIsSearching(true);
+    setHasGenerated(false);
     if (!from || !to) {
       toast.error("Please select a date range");
       done();
       return;
     }
 
-    // Mock backend data
-    const mockData = [
-      {
-        id: "CASE-001",
-        name: "Ravi Sharma",
-        fraud: 78,
-        aml: "CLEAR",
-        synthetic: "SUSPECT",
-      },
-      {
-        id: "CASE-002",
-        name: "Aditya Singh",
-        fraud: 45,
-        aml: "HIT",
-        synthetic: "CLEAN",
-      },
-    ];
+    try {
+      const type = reportTypeMap[selectedReport];
+      const result = await generateReport(type, from, to);
 
-    setReportData(mockData);
+      let mappedData = [];
 
-    toast.success("Report generated");
-    done();
+      if (type === "FRAUD_SUMMARY") {
+        // Map object of counts to a format the table can show
+        mappedData = [
+          { id: "Summary", name: "Total Cases", fraud: result.total_cases, aml: result.sanction_hits, synthetic: "N/A" },
+          { id: "Summary", name: "High Risk", fraud: result.high_risk, aml: "N/A", synthetic: "N/A" },
+          { id: "Summary", name: "Medium Risk", fraud: result.medium_risk, aml: "N/A", synthetic: "N/A" },
+          { id: "Summary", name: "Low Risk", fraud: result.low_risk, aml: "N/A", synthetic: "N/A" },
+        ];
+      } else if (result.results) {
+        // Map list of cases to the table fields
+        mappedData = result.results.map(r => ({
+          id: r.case_id || "N/A",
+          name: r.name || "N/A",
+          fraud: r.fraud_score ?? 0,
+          aml: r.aml_status || "CLEAR",
+          synthetic: r.synthetic_status || "CLEAN"
+        }));
+      }
+
+      setReportData(mappedData);
+      setHasGenerated(true);
+      await loadHistory();
+      toast.success("Report generated");
+    } catch (error) {
+      console.error("Report generation failed", error);
+      toast.error("Failed to generate report");
+    } finally {
+      setIsSearching(false);
+      done();
+    }
   };
 
   // 2️⃣ EXPORT CSV (user-triggered)
@@ -86,6 +136,7 @@ export default function Reports() {
       <ReportSelector
         selected={selectedReport}
         setSelected={setSelectedReport}
+        options={Object.keys(reportTypeMap)}
       />
 
       <ReportGenerator onGenerate={handleGenerateReport} />
@@ -94,7 +145,38 @@ export default function Reports() {
         data={reportData}
         onExportCSV={exportCSV}
         onExportPDF={exportPDF}
+        hasGenerated={hasGenerated}
+        loading={isSearching}
       />
+
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h3 className="text-lg font-semibold mb-3">Generated Report History</h3>
+
+        {!reportHistory.length ? (
+          <p className="text-sm text-gray-500">No saved reports yet.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-2 text-left">Report</th>
+                  <th className="text-left">Date Range</th>
+                  <th className="text-left">Generated At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reportHistory.map((item) => (
+                  <tr key={item.id} className="border-b">
+                    <td className="py-2">{reportTypeLabelMap[item.report_type] || item.report_type}</td>
+                    <td>{item.start_date} to {item.end_date}</td>
+                    <td>{new Date(item.created_at).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

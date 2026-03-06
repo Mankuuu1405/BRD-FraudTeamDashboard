@@ -1,22 +1,57 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { authApi } from "../api/authApi";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setErrorMessage("");
 
-    if (email === "admin@example.com" && password === "123456") {
-      localStorage.setItem("loggedIn", "true");
+    try {
+      const data = await authApi.login({ email, password });
+
+      // Store tokens and user details
+      localStorage.setItem("accessToken", data.tokens.access);
+      localStorage.setItem("refreshToken", data.tokens.refresh);
+      localStorage.setItem("user", JSON.stringify(data.user)); // For usage elsewhere
+
       navigate("/home");
-    } else {
-      alert("Invalid credentials");
+    } catch (error) {
+      console.error("Login failed", error);
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+        // Handle DRF validation error format: { non_field_errors: [...] } or { field: [...] } or { detail: "..." }
+        let message = "Login failed. Please check your credentials.";
+
+        if (typeof data === "string") {
+          message = data;
+        } else if (data.detail) {
+          message = data.detail;
+        } else if (data.non_field_errors) {
+          message = Array.isArray(data.non_field_errors) ? data.non_field_errors[0] : data.non_field_errors;
+        } else if (typeof data === "object") {
+          // Fallback to first error found in any field
+          const firstKey = Object.keys(data)[0];
+          const firstError = data[firstKey];
+          message = Array.isArray(firstError) ? firstError[0] : firstError;
+        }
+
+        setErrorMessage(message);
+      } else {
+        setErrorMessage("Network error. Could not reach the server.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,10 +136,19 @@ export default function Login() {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md hover:shadow-lg"
+            disabled={isLoading}
+            className={`w-full text-white py-3 rounded-lg font-semibold transition shadow-md hover:shadow-lg ${isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+              }`}
           >
-            Login
+            {isLoading ? "Signing In..." : "Login"}
           </button>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="text-red-600 text-sm text-center font-medium mt-2">
+              {errorMessage}
+            </div>
+          )}
         </form>
 
         {/* Sign Up Link */}

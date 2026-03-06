@@ -1,13 +1,16 @@
 import { useState } from "react";
 import ProfileDropdown from "../settings/ProfileDropdown";
 import ProfileModal from "../profile/ProfileModal";
+import { authApi } from "../../api/authApi";
 
 export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
 
+  // Parse user from local storage
+  const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
   const [user, setUser] = useState({
-    name: "Ravi Sharma",
-    email: "ravi.sharma@example.com",
+    name: savedUser.fullName || "User",
+    email: savedUser.email || "",
   });
 
   return (
@@ -28,8 +31,8 @@ export default function Header() {
         <div className="absolute right-6 top-4">
           <ProfileDropdown
             user={user}
-            onLogout={() => {
-              localStorage.removeItem("token");
+            onLogout={async () => {
+              await authApi.logout();
               window.location.href = "/login";
             }}
             onEditProfile={() => setModalOpen(true)}

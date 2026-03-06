@@ -1,31 +1,129 @@
-import { useState } from "react";
-import { HiTrash, HiPencil } from "react-icons/hi";
+import { useEffect, useMemo, useState } from "react";
+import { HiTrash } from "react-icons/hi";
 import toast from "react-hot-toast";
+import { settingsApi } from "../../api/settingsApi";
 
 export default function RolesAndPermissions() {
-  const [roles, setRoles] = useState([
-    { id: 1, name: "Admin", userCount: 5 },
-    { id: 2, name: "Fraud Analyst", userCount: 12 },
-    { id: 3, name: "Viewer", userCount: 8 }
-  ]);
+  const [roles, setRoles] = useState([]);
   const [newRole, setNewRole] = useState("");
-  const [selectedRole, setSelectedRole] = useState("Admin");
+  const [selectedRoleId, setSelectedRoleId] = useState(null);
+  const [permissionRows, setPermissionRows] = useState([]);
 
-  const modules = ["Cases", "Reports", "Analytics", "Settings"];
   const actions = ["View", "Edit", "Create", "Delete"];
 
-  const handleAddRole = () => {
+  const selectedRole = useMemo(
+    () => roles.find((role) => role.id === selectedRoleId),
+    [roles, selectedRoleId]
+  );
+
+  const loadRolesAndModules = async () => {
+    try {
+      const rolesData = await settingsApi.getRoles();
+
+      const normalizedRoles = (rolesData || []).map((role) => ({
+        id: role.id,
+        name: role.name,
+        userCount: role.user_count || 0,
+      }));
+
+      setRoles(normalizedRoles);
+
+      if (normalizedRoles.length > 0) {
+        setSelectedRoleId(normalizedRoles[0].id);
+      }
+    } catch {
+      toast.error("Failed to load roles and modules");
+    }
+  };
+
+  const loadPermissions = async (roleId) => {
+    if (!roleId) return;
+
+    try {
+      const data = await settingsApi.getRolePermissions(roleId);
+      const rows = (data.permissions || []).map((item) => ({
+        module: item.module,
+        can_view: !!item.can_view,
+        can_edit: !!item.can_edit,
+        can_create: !!item.can_create,
+        can_delete: !!item.can_delete,
+      }));
+
+      setPermissionRows(rows);
+    } catch {
+      toast.error("Failed to load permissions");
+    }
+  };
+
+  useEffect(() => {
+    loadRolesAndModules();
+  }, []);
+
+  useEffect(() => {
+    loadPermissions(selectedRoleId);
+  }, [selectedRoleId]);
+
+  const handleAddRole = async () => {
     if (newRole.trim().length === 0) return;
 
-    setRoles([...roles, { id: Date.now(), name: newRole, userCount: 0 }]);
-    toast.success("Role added successfully ✅");
-    setNewRole("");
+    try {
+      const createdRole = await settingsApi.createRole(newRole.trim());
+      const nextRole = {
+        id: createdRole.id,
+        name: createdRole.name,
+        userCount: 0,
+      };
+      setRoles((prev) => [...prev, nextRole]);
+      setSelectedRoleId(nextRole.id);
+      toast.success("Role added successfully ✅");
+      setNewRole("");
+    } catch {
+      toast.error("Failed to add role");
+    }
   };
 
 
-  const handleDeleteRole = (id) => {
-    setRoles(roles.filter(role => role.id !== id));
-    toast.success("Role deleted");
+  const handleDeleteRole = async (id) => {
+    try {
+      await settingsApi.deleteRole(id);
+      const nextRoles = roles.filter((role) => role.id !== id);
+      setRoles(nextRoles);
+      if (selectedRoleId === id) {
+        setSelectedRoleId(nextRoles[0]?.id || null);
+      }
+      toast.success("Role deleted");
+    } catch {
+      toast.error("Failed to delete role");
+    }
+  };
+
+  const handleTogglePermission = (moduleId, permissionKey) => {
+    setPermissionRows((prev) =>
+      prev.map((row) =>
+        row.module.id === moduleId
+          ? { ...row, [permissionKey]: !row[permissionKey] }
+          : row
+      )
+    );
+  };
+
+  const handleSavePermissions = async () => {
+    if (!selectedRoleId) return;
+
+    try {
+      const payload = permissionRows.map((row) => ({
+        module_id: row.module.id,
+        can_view: row.can_view,
+        can_edit: row.can_edit,
+        can_create: row.can_create,
+        can_delete: row.can_delete,
+      }));
+
+      await settingsApi.saveRolePermissions(selectedRoleId, payload);
+      toast.success("Permissions updated successfully ✅");
+    } catch {
+      toast.error("Failed to update permissions");
+    }
   };
 
 
@@ -62,11 +160,11 @@ export default function RolesAndPermissions() {
             {roles.map((role) => (
               <div
                 key={role.id}
-                className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedRole === role.name
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
+                className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedRoleId === role.id
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-gray-200 hover:border-gray-300"
                   }`}
-                onClick={() => setSelectedRole(role.name)}
+                onClick={() => setSelectedRoleId(role.id)}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
@@ -96,7 +194,7 @@ export default function RolesAndPermissions() {
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-bold text-gray-800">Permission Matrix</h2>
           <p className="text-sm text-gray-500 mt-1">
-            Configure permissions for <span className="font-semibold text-blue-600">{selectedRole}</span> role
+            Configure permissions for <span className="font-semibold text-blue-600">{selectedRole?.name || "-"}</span> role
           </p>
         </div>
 
@@ -119,26 +217,30 @@ export default function RolesAndPermissions() {
             </thead>
 
             <tbody>
-              {modules.map((module, idx) => (
+              {permissionRows.map((row) => (
                 <tr
-                  key={module}
+                  key={row.module.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="px-6 py-4 font-medium text-gray-800 border-b border-gray-200">
-                    {module}
+                    {row.module.name}
                   </td>
-                  {actions.map((action) => (
-                    <td
-                      key={action}
-                      className="px-6 py-4 text-center border-b border-gray-200"
-                    >
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
-                        defaultChecked={idx === 0} // Admin has all permissions by default
-                      />
-                    </td>
-                  ))}
+                  {actions.map((action) => {
+                    const key = `can_${action.toLowerCase()}`;
+                    return (
+                      <td
+                        key={action}
+                        className="px-6 py-4 text-center border-b border-gray-200"
+                      >
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                          checked={!!row[key]}
+                          onChange={() => handleTogglePermission(row.module.id, key)}
+                        />
+                      </td>
+                    )
+                  })}
                 </tr>
               ))}
             </tbody>
@@ -151,7 +253,7 @@ export default function RolesAndPermissions() {
             Cancel
           </button>
           <button
-            onClick={() => toast.success("Permissions updated successfully ✅")}
+            onClick={handleSavePermissions}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
           >
             Save Permissions

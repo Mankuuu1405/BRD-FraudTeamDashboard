@@ -1,15 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../ui/Modal";
 import toast from "react-hot-toast";
+import { settingsApi } from "../../api/settingsApi";
 
-export default function EditProfileModal({ open, onClose }) {
-  const [name, setName] = useState("Ravi Sharma");
-  const [email, setEmail] = useState("ravi@example.com");
-  const [phone, setPhone] = useState("9876543210");
+export default function EditProfileModal({ open, onClose, profile, onSaved }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [saving, setSaving] = useState(false);
 
-  const handleSave = () => {
-    toast.success("Profile updated successfully");
-    onClose();
+  useEffect(() => {
+    if (!open) return;
+    const fullName =
+      profile?.full_name ||
+      [profile?.first_name, profile?.last_name].filter(Boolean).join(" ");
+    setName(fullName || "");
+    setEmail(profile?.email || "");
+    setPhone(profile?.phone || "");
+  }, [open, profile]);
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const [firstName = "", ...rest] = name.trim().split(/\s+/);
+      const lastName = rest.join(" ");
+
+      await settingsApi.updateProfile({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        phone,
+      });
+
+      await onSaved?.();
+      toast.success("Profile updated successfully");
+      onClose();
+    } catch {
+      toast.error("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -59,8 +89,9 @@ export default function EditProfileModal({ open, onClose }) {
           <button
             className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
             onClick={handleSave}
+            disabled={saving}
           >
-            Save Changes
+            {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>

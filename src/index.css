@@ -18,3 +18,17 @@
 @theme {
   --color-primary-blue: #1D4ED8;
 }
+
+.analytics-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}

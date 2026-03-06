@@ -2,6 +2,8 @@ import AccountSettings from "../components/settings/AccountSettings";
 import NotificationSettings from "../components/settings/NotificationSettings";
 import SecuritySettings from "../components/settings/SecuritySettings";
 import RolesAndPermissions from "../components/settings/RolesAndPermission";
+import TeamManagement from "../components/settings/TeamManagement";
+import DepartmentManagement from "../components/settings/DepartmentManagement";
 
 export default function Settings() {
   return (
@@ -10,6 +12,8 @@ export default function Settings() {
       <AccountSettings />
       <NotificationSettings />
       <SecuritySettings />
+      <DepartmentManagement />
+      <TeamManagement />
       <RolesAndPermissions />
     </div>
   );

@@ -1,24 +1,76 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../api/authApi";
 
 const SignUp = ({ onSwitch, onSignUp }) => {
     const [formData, setFormData] = useState({
-        name: "",
+        full_name: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        role: "verifier",
+        confirm_password: "",
+        role: "REVIEWER",
     });
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
+    const handleSubmit = async () => {
+        setErrorMessage("");
+
+        if (formData.password !== formData.confirm_password) {
+            setErrorMessage("Passwords do not match!");
             return;
         }
-        if (formData.name && formData.email && formData.password) {
-            onSignUp(formData);
+
+        if (formData.full_name && formData.email && formData.password) {
+            setIsLoading(true);
+            try {
+                const response = await authApi.register(formData);
+                console.log("Signup success", response);
+
+                // Usually backend logs in user directly
+                if (response.tokens) {
+                    localStorage.setItem("accessToken", response.tokens.access);
+                    localStorage.setItem("refreshToken", response.tokens.refresh);
+                    localStorage.setItem("user", JSON.stringify(response.user));
+                    navigate("/home");
+                } else {
+                    // Fallback to login screen
+                    navigate("/login");
+                }
+            } catch (error) {
+                console.error("Signup error:", error);
+                if (error.response && error.response.data) {
+                    const data = error.response.data;
+                    let message = "Signup failed. Please check your data.";
+
+                    if (typeof data === "string") {
+                        message = data;
+                    } else if (data.detail) {
+                        message = data.detail;
+                    } else if (typeof data === "object") {
+                        // DRF validation: { "email": ["..."], "password": ["..."] }
+                        const errorDetails = Object.entries(data)
+                            .map(([key, value]) => {
+                                const field = key.replace("_", " ");
+                                const msg = Array.isArray(value) ? value[0] : value;
+                                return `${field}: ${msg}`;
+                            })
+                            .join(" ");
+                        message = errorDetails || message;
+                    }
+
+                    setErrorMessage(message);
+                } else {
+                    setErrorMessage("Network error. Could not reach the server.");
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            setErrorMessage("Please fill all required fields");
         }
     };
 
@@ -43,9 +95,9 @@ const SignUp = ({ onSwitch, onSignUp }) => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg 
                 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="John Doe"
-                            value={formData.name}
+                            value={formData.full_name}
                             onChange={(e) =>
-                                setFormData({ ...formData, name: e.target.value })
+                                setFormData({ ...formData, full_name: e.target.value })
                             }
                         />
                     </div>
@@ -67,7 +119,7 @@ const SignUp = ({ onSwitch, onSignUp }) => {
                         />
                     </div>
 
-                    {/* Role Dropdown (Improved) */}
+                    {/* Role Dropdown */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Role
@@ -86,9 +138,9 @@ const SignUp = ({ onSwitch, onSignUp }) => {
                                     setFormData({ ...formData, role: e.target.value })
                                 }
                             >
-                                <option value="verifier">Reviewer</option>
-                                <option value="kyc">Underwriter</option>
-                                <option value="doc_verification">Analyst</option>
+                                <option value="REVIEWER">Reviewer</option>
+                                <option value="UNDERWRITER">Underwriter</option>
+                                <option value="ANALYST">Analyst</option>
                             </select>
 
                             {/* Custom dropdown arrow */}
@@ -130,25 +182,31 @@ const SignUp = ({ onSwitch, onSignUp }) => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg 
                 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="••••••••"
-                            value={formData.confirmPassword}
+                            value={formData.confirm_password}
                             onChange={(e) =>
                                 setFormData({
                                     ...formData,
-                                    confirmPassword: e.target.value,
+                                    confirm_password: e.target.value,
                                 })
                             }
                         />
                     </div>
 
+                    {/* Error Message */}
+                    {errorMessage && (
+                        <div className="text-red-600 text-sm text-center font-medium mt-2">
+                            {errorMessage}
+                        </div>
+                    )}
+
                     {/* Submit Button */}
                     <button
                         onClick={handleSubmit}
-                        className="
-              w-full px-4 py-2 bg-primary-blue text-white rounded-lg 
-              hover:bg-blue-800 transition-colors font-medium
-            "
+                        disabled={isLoading}
+                        className={`w-full px-4 py-2 text-white rounded-lg transition-colors font-medium ${isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-800"
+                            }`}
                     >
-                        Create Account
+                        {isLoading ? "Creating Account..." : "Create Account"}
                     </button>
                 </div>
 

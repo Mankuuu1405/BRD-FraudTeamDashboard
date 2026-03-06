@@ -1,26 +1,49 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-export default function AMLTrendChart() {
-  const data = [
-    { day: "Mon", hits: 1 },
-    { day: "Tue", hits: 3 },
-    { day: "Wed", hits: 2 },
-    { day: "Thu", hits: 1 },
-    { day: "Fri", hits: 4 },
-  ];
+export default function AMLTrendChart({ data }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full min-w-0">
+        <h2 className="text-[16px] font-bold text-black mb-6">AML Sanction Hits (Weekly)</h2>
+        <div className="h-64 flex items-center justify-center text-sm text-gray-500">No data available</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow">
-      <h2 className="text-xl font-bold mb-4">AML Sanction Hits (Weekly)</h2>
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full min-w-0">
+      <h2 className="text-[16px] font-bold text-black mb-6">AML Sanction Hits (Weekly)</h2>
 
-      <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={data}>
-          <XAxis dataKey="day" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="hits" stroke="#2563eb" strokeWidth={3} />
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="h-64 w-full">
+        <ResponsiveContainer width="100%" height={260}>
+          <LineChart data={data}>
+            <XAxis
+              dataKey="date"
+              axisLine={{ stroke: '#9ca3af' }}
+              tickLine={{ stroke: '#9ca3af' }}
+              tick={{ fill: '#4b5563', fontSize: 13 }}
+              tickFormatter={(val) => {
+                const date = new Date(val);
+                return isNaN(date) ? String(val) : date.toLocaleDateString("en-US", { weekday: "short" });
+              }}
+            />
+            <YAxis
+              axisLine={{ stroke: '#9ca3af' }}
+              tickLine={{ stroke: '#9ca3af' }}
+              tick={{ fill: '#4b5563', fontSize: 13 }}
+            />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="count"
+              stroke="#2563eb"
+              strokeWidth={2}
+              dot={{ fill: '#ffffff', stroke: '#2563eb', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: '#2563eb', stroke: "none" }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

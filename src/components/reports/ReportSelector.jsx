@@ -1,9 +1,10 @@
-export default function ReportSelector({ selected, setSelected }) {
-  const types = [
+export default function ReportSelector({ selected, setSelected, options }) {
+  const types = options || [
     "Fraud Summary Report",
     "AML Sanction Report",
     "High Risk Applicants",
     "Synthetic ID Report",
+    "All Case Records",
   ];
 
   return (
@@ -15,11 +16,10 @@ export default function ReportSelector({ selected, setSelected }) {
           <button
             key={t}
             onClick={() => setSelected(t)}
-            className={`p-3 rounded-lg border text-sm ${
-              selected === t
+            className={`p-3 rounded-lg border text-sm ${selected === t
                 ? "bg-blue-600 text-white border-blue-600"
                 : "bg-gray-50 border-gray-300"
-            }`}
+              }`}
           >
             {t}
           </button>
